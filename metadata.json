@@ -1,0 +1,11 @@
+{
+  "name": "SchoolPulse",
+  "description": "A premium, mobile-first SaaS school management system for Nigerian primary and secondary schools. Features attendance tracking, result collation, fee management, and parent visibility.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "Multi-tenant SaaS architecture",
+    "Mobile-first responsive design",
+    "Attendance & Result Management",
+    "Role-based Dashboards"
+  ]
+}
