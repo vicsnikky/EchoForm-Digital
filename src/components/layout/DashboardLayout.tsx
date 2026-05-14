@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, Users, BookOpen, CreditCard, ClipboardCheck, Settings, LogOut, Menu, Bell } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, CreditCard, ClipboardCheck, Settings, LogOut, Menu, Bell, Building2 } from 'lucide-react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { cn } from '../../lib/utils';

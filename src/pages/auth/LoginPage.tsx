@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { LogIn, Mail, Lock, ShieldCheck, ArrowRight } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth, UserRole } from '../../contexts/AuthContext';
 
 export default function LoginPage() {
   const [email, setEmail] = React.useState('');
@@ -11,7 +11,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleLogin = async (e: React.FormEvent, role: 'admin' | 'teacher' | 'parent') => {
+  const handleLogin = async (e: React.FormEvent, role: UserRole) => {
     e.preventDefault();
     setLoading(true);
     try {

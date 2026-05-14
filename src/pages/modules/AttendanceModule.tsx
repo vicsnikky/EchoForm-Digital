@@ -31,7 +31,7 @@ export default function AttendanceModule() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Attendance Tracking</h2>
-          <p className="text-gray-500 text-sm">Term 2, Week 6 • Tuesday, June 14, 2024</p>
+          <p className="text-gray-500 text-sm">Term 2, Week 6 • Tuesday, June 16, 2026</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="flex items-center gap-2 bg-white border px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm">
@@ -122,7 +122,7 @@ export default function AttendanceModule() {
                     </div>
                     <div>
                       <p className="font-bold text-gray-900">{student.name}</p>
-                      <p className="text-xs text-gray-500 uppercase tracking-tighter">Roll No: SP-2024-00{student.id}</p>
+                      <p className="text-xs text-gray-500 uppercase tracking-tighter">Roll No: SP-2026-00{student.id}</p>
                     </div>
                   </div>
 

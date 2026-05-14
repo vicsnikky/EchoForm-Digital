@@ -28,7 +28,7 @@ export default function FeeModule() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Fee Management</h2>
-          <p className="text-gray-500 text-sm">Financial Oversight • Term 2, 2024</p>
+          <p className="text-gray-500 text-sm">Financial Oversight • Term 2, 2026</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="flex items-center gap-2 bg-white border px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm">
@@ -131,11 +131,11 @@ export default function FeeModule() {
               </thead>
               <tbody className="divide-y">
                 {[
-                  { date: 'Jun 14, 2024', student: 'Ifeoluwa O.', type: 'Tuition Fee', amount: 85000, status: 'Success' },
-                  { date: 'Jun 13, 2024', student: 'Musa Garba', type: 'Bus Fee', amount: 12000, status: 'Success' },
-                  { date: 'Jun 12, 2024', student: 'Zainab Ahmed', type: 'Tuition Fee', amount: 125000, status: 'Pending' },
-                  { date: 'Jun 12, 2024', student: 'Ezekiel J.', type: 'Uniform', amount: 8000, status: 'Success' },
-                  { date: 'Jun 11, 2024', student: 'Chinonso U.', type: 'Tuition Fee', amount: 45000, status: 'Failed' },
+                  { date: 'Jun 16, 2026', student: 'Ifeoluwa O.', type: 'Tuition Fee', amount: 85000, status: 'Success' },
+                  { date: 'Jun 15, 2026', student: 'Musa Garba', type: 'Bus Fee', amount: 12000, status: 'Success' },
+                  { date: 'Jun 14, 2026', student: 'Zainab Ahmed', type: 'Tuition Fee', amount: 125000, status: 'Pending' },
+                  { date: 'Jun 14, 2026', student: 'Ezekiel J.', type: 'Uniform', amount: 8000, status: 'Success' },
+                  { date: 'Jun 13, 2026', student: 'Chinonso U.', type: 'Tuition Fee', amount: 45000, status: 'Failed' },
                 ].map((tx, i) => (
                   <tr key={i} className="hover:bg-gray-50/50 transition-colors cursor-pointer group">
                     <td className="px-6 py-4 text-sm text-gray-500 font-medium">{tx.date}</td>

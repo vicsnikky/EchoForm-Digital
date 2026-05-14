@@ -11,7 +11,9 @@ import {
   Download,
   Calendar,
   MessageCircle,
-  ArrowRight
+  ArrowRight,
+  TrendingUp,
+  Award
 } from 'lucide-react';
 import { cn, formatCurrency } from '../../lib/utils';
 
@@ -69,7 +71,7 @@ export default function ParentDashboard() {
                 <p className="text-lg font-bold text-gray-500">{selectedChild.class}</p>
                 <div className="flex items-center gap-3 pt-2">
                   <span className="flex items-center gap-1.5 text-xs font-bold bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full">
-                    <MapPin size={12} /> Roll: SP-2024-042
+                    <MapPin size={12} /> Roll: SP-2026-042
                   </span>
                   <span className={cn(
                     "flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full",
@@ -194,5 +196,3 @@ export default function ParentDashboard() {
     </div>
   );
 }
-
-import { Award } from 'lucide-react';

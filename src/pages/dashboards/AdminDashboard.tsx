@@ -9,7 +9,12 @@ import {
   Calendar,
   MoreVertical,
   CheckCircle2,
-  Clock
+  Clock,
+  UserPlus,
+  Shield,
+  Bell,
+  FileText,
+  AlertCircle
 } from 'lucide-react';
 import { formatCurrency } from '../../lib/utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
@@ -34,12 +39,17 @@ export default function AdminDashboard() {
       {/* Welcome Section */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <p className="text-blue-600 font-medium text-sm">Welcome back, Admin</p>
-          <h2 className="text-3xl font-bold text-gray-900 tracking-tight">School Overview</h2>
+          <p className="text-blue-600 font-medium text-sm">Main Campus Administration</p>
+          <div className="flex items-center gap-3">
+            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">School Overview</h2>
+            <div className="bg-gray-900 text-emerald-400 px-3 py-1 rounded-lg text-[10px] font-black tracking-widest mt-1">
+              ID: SCH-8241-PLS
+            </div>
+          </div>
         </div>
         <div className="flex items-center gap-2 text-gray-500 bg-white px-4 py-2 rounded-xl border-dashed border-2 shadow-sm">
           <Calendar size={18} />
-          <span className="text-sm font-medium">Term 2, Week 6 • June 2024</span>
+          <span className="text-sm font-medium">Term 2, Week 6 • June 2026</span>
         </div>
       </div>
 
@@ -100,28 +110,35 @@ export default function AdminDashboard() {
         </div>
 
         <div className="bg-white p-6 rounded-2xl border shadow-sm">
-          <h3 className="font-bold text-gray-900 text-lg mb-6">Pending Approvals</h3>
+          <h3 className="font-bold text-gray-900 text-lg mb-6 flex items-center justify-between">
+            Staff Vetting
+            <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-2 py-1 rounded">Action Required</span>
+          </h3>
           <div className="space-y-4">
             {[
-              { type: 'Result Vetting', target: 'JSS3 Math Exam', user: 'Mr. Okoro', color: 'bg-blue-50 text-blue-600' },
-              { type: 'Fee Waiver', target: 'Chukwudi N.', user: 'Mrs. Adeosun', color: 'bg-amber-50 text-amber-600' },
-              { type: 'Expense Request', target: 'Generator Maintenance', user: 'Bursar', color: 'bg-purple-50 text-purple-600' },
+              { type: 'Exam Questions', target: 'JSS3 Math Exam', user: 'Mr. Okoro', status: 'Pending', icon: FileText, color: 'text-blue-600' },
+              { type: 'Quiz Set', target: 'SS2 Further Maths', user: 'Mr. Jude', status: 'Rejected', icon: AlertCircle, color: 'text-red-500' },
+              { type: 'CA Test', target: 'Pry 4 English', user: 'Mrs. Ade', status: 'Pending', icon: Clock, color: 'text-amber-600' },
             ].map((item, i) => (
               <div key={i} className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-50 border border-transparent hover:border-gray-100 transition-all cursor-pointer group">
-                <div className={cn("p-2 rounded-lg shrink-0", item.color)}>
-                  <Clock size={16} />
+                <div className={cn("p-2 rounded-lg shrink-0", item.color, "bg-opacity-10")}>
+                  <item.icon size={16} />
                 </div>
-                <div className="min-w-0">
-                  <p className="font-bold text-sm text-gray-900 truncate">{item.type}</p>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between">
+                    <p className="font-bold text-sm text-gray-900 truncate">{item.type}</p>
+                    <span className={cn(
+                      "text-[9px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded",
+                      item.status === 'Pending' ? 'bg-amber-50 text-amber-600' :
+                      item.status === 'Rejected' ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'
+                    )}>{item.status}</span>
+                  </div>
                   <p className="text-xs text-gray-500 mt-0.5">{item.target} • {item.user}</p>
                 </div>
-                <button className="ml-auto p-1 text-gray-400 group-hover:text-blue-600">
-                  <MoreVertical size={16} />
-                </button>
               </div>
             ))}
             <button className="w-full py-3 text-sm font-bold text-blue-600 bg-blue-50 rounded-xl hover:bg-blue-100 transition-colors mt-2">
-              View All Approvals
+              Open Vetting Portal
             </button>
           </div>
         </div>

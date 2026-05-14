@@ -8,7 +8,8 @@ import {
   Globe, 
   ChevronRight,
   ArrowRight,
-  Check
+  Check,
+  Users
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -75,12 +76,43 @@ export default function LandingPage() {
             transition={{ delay: 0.3 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
           >
-            <button className="w-full sm:w-auto bg-blue-600 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:shadow-2xl hover:shadow-blue-600/40 transition-all flex items-center justify-center gap-2 active:scale-95 group">
-              Start Free Trial <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-            </button>
-            <button className="w-full sm:w-auto bg-white border-2 border-gray-100 text-gray-900 px-10 py-5 rounded-2xl font-bold text-lg hover:border-blue-600 transition-all active:scale-95">
-              Book a Demo
-            </button>
+            <Link to="/register" className="w-full sm:w-auto bg-blue-600 text-white px-10 py-5 rounded-2xl font-bold text-lg hover:shadow-2xl hover:shadow-blue-600/40 transition-all flex items-center justify-center gap-2 active:scale-95 group">
+              Register Your School <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+            </Link>
+            <div className="w-full sm:w-auto flex flex-col gap-2">
+              <Link to="/login" className="bg-white border-2 border-gray-100 text-gray-900 px-10 py-5 rounded-2xl font-bold text-lg hover:border-blue-600 transition-all active:scale-95 text-center">
+                Staff Login
+              </Link>
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-white p-6 md:p-8 rounded-[32px] border shadow-xl shadow-blue-900/5 max-w-2xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            <div className="space-y-3 text-left">
+              <h4 className="font-black text-gray-900 flex items-center gap-2">
+                <Users size={18} className="text-blue-600" /> Parent Quick Access
+              </h4>
+              <p className="text-xs text-gray-500 font-medium leading-relaxed">Enter child's Admission Number to view results & attendance.</p>
+              <div className="flex gap-2">
+                <input type="text" placeholder="ADM-2026-XXX" className="flex-1 bg-gray-50 border rounded-xl px-4 py-2 text-sm font-bold outline-none focus:border-blue-600 focus:bg-white transition-all" />
+                <button className="bg-blue-600 text-white p-2 rounded-xl hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20"><ArrowRight size={18} /></button>
+              </div>
+            </div>
+            
+            <div className="space-y-3 text-left md:border-l md:pl-6">
+              <h4 className="font-black text-gray-900 flex items-center gap-2">
+                <Shield size={18} className="text-emerald-600" /> Teacher Portal
+              </h4>
+              <p className="text-xs text-gray-500 font-medium leading-relaxed">Login with School ID to access your assigned classes.</p>
+              <div className="flex gap-2">
+                <input type="text" placeholder="SCHOOL-ID" className="flex-1 bg-gray-50 border rounded-xl px-4 py-2 text-sm font-bold outline-none focus:border-emerald-600 focus:bg-white transition-all" />
+                <button className="bg-emerald-600 text-white p-2 rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/20"><ArrowRight size={18} /></button>
+              </div>
+            </div>
           </motion.div>
 
           <motion.div

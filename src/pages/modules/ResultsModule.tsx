@@ -9,7 +9,9 @@ import {
   Download, 
   Upload, 
   CheckCircle2, 
-  AlertCircle 
+  AlertCircle,
+  Clock,
+  ArrowRight
 } from 'lucide-react';
 import { cn, getGrade } from '../../lib/utils';
 
@@ -29,7 +31,7 @@ export default function ResultsModule() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Results Management</h2>
-          <p className="text-gray-500 text-sm">Batch: Term 2 Examination 2024</p>
+          <p className="text-gray-500 text-sm">Batch: Term 2 Examination 2026</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="flex items-center gap-2 bg-white border px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm">
@@ -162,5 +164,3 @@ export default function ResultsModule() {
     </div>
   );
 }
-
-import { ArrowRight } from 'lucide-react';
