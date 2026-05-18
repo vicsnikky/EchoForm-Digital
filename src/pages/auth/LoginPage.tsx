@@ -88,7 +88,7 @@ export default function LoginPage() {
           </div>
           
           <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-relaxed">
-            Note: This is a demo. In a production environment, this would connect to your Django API.
+            
           </p>
         </div>
       </div>
