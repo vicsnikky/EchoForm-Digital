@@ -5,22 +5,22 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatCurrency(amount: number) {
+export function getGrade(score: number): string {
+  if (score >= 75) return 'A1';
+  if (score >= 70) return 'B2';
+  if (score >= 65) return 'B3';
+  if (score >= 60) return 'C4';
+  if (score >= 55) return 'C5';
+  if (score >= 50) return 'C6';
+  if (score >= 45) return 'D7';
+  if (score >= 40) return 'E8';
+  return 'F9';
+}
+
+export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-NG', {
     style: 'currency',
     currency: 'NGN',
-    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
   }).format(amount);
-}
-
-export function getGrade(score: number) {
-  if (score >= 75) return { grade: 'A1', remark: 'Excellent' };
-  if (score >= 70) return { grade: 'B2', remark: 'Very Good' };
-  if (score >= 65) return { grade: 'B3', remark: 'Good' };
-  if (score >= 60) return { grade: 'C4', remark: 'Credit' };
-  if (score >= 55) return { grade: 'C5', remark: 'Credit' };
-  if (score >= 50) return { grade: 'C6', remark: 'Credit' };
-  if (score >= 45) return { grade: 'D7', remark: 'Pass' };
-  if (score >= 40) return { grade: 'E8', remark: 'Pass' };
-  return { grade: 'F9', remark: 'Fail' };
 }

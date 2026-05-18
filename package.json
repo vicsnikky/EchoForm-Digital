@@ -1,44 +1,33 @@
 {
-  "name": "react-example",
+  "name": "nigeria-school-pulse",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx server.ts",
-    "build": "vite build && esbuild server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
-    "start": "node dist/server.cjs",
-    "preview": "vite preview",
-    "clean": "rm -rf dist server.js",
-    "lint": "tsc --noEmit"
+    "dev": "vite --port 3000",
+    "build": "tsc && vite build",
+    "lint": "tsc --noEmit",
+    "preview": "vite preview --port 3000"
   },
   "dependencies": {
-    "@google/genai": "^1.29.0",
-    "@tailwindcss/vite": "^4.1.14",
-    "@vitejs/plugin-react": "^5.0.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.23.1",
+    "lucide-react": "^0.395.0",
+    "framer-motion": "^11.2.10",
     "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
-    "dotenv": "^17.2.3",
-    "express": "^4.21.2",
-    "firebase": "^12.13.0",
-    "framer-motion": "^12.38.0",
-    "lucide-react": "^0.546.0",
-    "motion": "^12.23.24",
-    "react": "^19.0.1",
-    "react-dom": "^19.0.1",
-    "react-markdown": "^10.1.0",
-    "react-router-dom": "^7.15.0",
-    "recharts": "^3.8.1",
-    "tailwind-merge": "^3.6.0",
-    "vite": "^6.2.3"
+    "tailwind-merge": "^2.3.0",
+    "recharts": "^2.12.7",
+    "firebase": "^10.12.2"
   },
   "devDependencies": {
-    "@types/express": "^4.17.21",
-    "@types/node": "^22.14.0",
-    "autoprefixer": "^10.4.21",
-    "esbuild": "^0.25.0",
-    "tailwindcss": "^4.1.14",
-    "tsx": "^4.21.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.3"
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.1"
   }
 }

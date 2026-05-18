@@ -1,23 +1,17 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { 
-  Shield, 
   Building2, 
-  UserPlus, 
+  Users, 
+  CreditCard, 
   Search, 
-  TrendingUp, 
-  Globe, 
   Plus, 
-  MoreVertical,
-  CheckCircle2,
-  AlertCircle
+  MoreVertical, 
+  CheckCircle2, 
+  TrendingUp,
+  UserPlus
 } from 'lucide-react';
-import { formatCurrency, cn } from '../../lib/utils';
+import { cn } from '../../lib/utils';
 
 export default function PlatformAdminDashboard() {
   const [showAddModal, setShowAddModal] = React.useState(false);
@@ -25,15 +19,14 @@ export default function PlatformAdminDashboard() {
   const [provisioned, setProvisioned] = React.useState(false);
 
   const schools = [
-    { id: 's1', name: 'Emerald Academy', admin: 'Mrs. Adebayo', students: 450, plan: 'Premium', status: 'Active' },
-    { id: 's2', name: 'Lekki Heights', admin: 'Mr. Jude', students: 820, plan: 'Premium', status: 'Active' },
-    { id: 's3', name: 'Stella Maris', admin: 'Sr. Mary', students: 120, plan: 'Trial', status: 'Expiring' },
+    { id: 's1', name: 'Nigeria International School', admin: 'Mrs. Adebayo', students: 450, plan: 'Premium', status: 'Active' },
+    { id: 's2', name: 'Eco Learning Academy', admin: 'Mr. Jude', students: 85, plan: 'Starter', status: 'Active' },
+    { id: 's3', name: 'Global Excellence School', admin: 'Sr. Mary', students: 120, plan: 'Trial', status: 'Expiring' },
   ];
 
   const handleProvision = (e: React.FormEvent) => {
     e.preventDefault();
     setIsProvisioning(true);
-    // Simulate API call
     setTimeout(() => {
       setIsProvisioning(false);
       setProvisioned(true);
@@ -48,92 +41,85 @@ export default function PlatformAdminDashboard() {
   return (
     <div className="space-y-8 animate-in">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-gray-900 text-white p-8 rounded-[32px] relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl -z-0"></div>
-        <div className="relative z-10">
-          <div className="flex items-center gap-2 text-blue-400 font-bold text-xs uppercase tracking-[0.2em] mb-2">
-            <Shield size={14} /> Platform Control Center
-          </div>
-          <h2 className="text-3xl font-black tracking-tight">Manage the Pulse</h2>
-          <p className="text-blue-200 mt-1">Directly provisioning schools and managing subscriptions.</p>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+          <p className="text-gray-500 font-bold text-[10px] uppercase tracking-widest mb-1">Global System Controller</p>
+          <h2 className="text-3xl font-black text-gray-900 tracking-tight leading-none">Institute Network</h2>
         </div>
         <button 
           onClick={() => setShowAddModal(true)}
-          className="relative z-10 bg-blue-600 hover:bg-blue-500 text-white px-6 py-4 rounded-2xl font-bold flex items-center gap-2 shadow-xl shadow-blue-900/40 transition-all active:scale-95"
+          className="bg-gray-900 text-white px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest flex items-center gap-3 hover:bg-gray-800 transition-all shadow-xl shadow-gray-900/20 active:scale-95"
         >
-          <Plus size={20} /> Register New School
+          <Plus size={18} /> Provision New Tenant
         </button>
       </div>
 
-      {/* KPI Cards */}
+      {/* Global Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[
-          { title: 'Total Schools', value: '542', icon: Building2, color: 'text-blue-600' },
-          { title: 'Active Students', value: '184k', icon: Globe, color: 'text-emerald-600' },
-          { title: 'Monthly Revenue', value: formatCurrency(12500000), icon: TrendingUp, color: 'text-purple-600' },
-          { title: 'SMS Sent', value: '42.5k', icon: AlertCircle, color: 'text-amber-600' },
-        ].map(kpi => (
-          <div key={kpi.title} className="bg-white p-6 rounded-2xl border shadow-sm">
-            <kpi.icon size={20} className={cn("mb-4", kpi.color)} />
-            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">{kpi.title}</p>
-            <p className="text-2xl font-black text-gray-900 mt-1">{kpi.value}</p>
+          { label: 'Active Schools', val: '1,284', icon: Building2, color: 'text-blue-600', bg: 'bg-blue-50' },
+          { label: 'Global Students', val: '412.5k', icon: Users, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+          { label: 'Monthly Revenue', val: '₦14.2M', icon: CreditCard, color: 'text-purple-600', bg: 'bg-purple-50' },
+          { label: 'Growth Velocity', val: '+12.4%', icon: TrendingUp, color: 'text-amber-600', bg: 'bg-amber-50' },
+        ].map((stat, i) => (
+          <div key={i} className="bg-white p-8 rounded-[32px] border shadow-sm hover:shadow-md transition-shadow group">
+            <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform", stat.bg, stat.color)}>
+              <stat.icon size={24} />
+            </div>
+            <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{stat.label}</p>
+            <p className="text-2xl font-black text-gray-900">{stat.val}</p>
           </div>
         ))}
       </div>
 
       {/* School Management Table */}
-      <div className="bg-white rounded-3xl border shadow-sm overflow-hidden" id="schools">
-        <div className="p-6 border-b flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <h3 className="font-bold text-lg text-gray-900">Registered Institutions</h3>
-          <div className="relative w-full md:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-            <input 
-              type="text" 
-              placeholder="Filter by school or admin..."
-              className="w-full bg-gray-50 border rounded-xl py-2 pl-10 pr-4 text-sm font-medium focus:ring-2 ring-blue-50 focus:border-blue-600 outline-none" 
-            />
+      <div className="bg-white rounded-[40px] border shadow-sm overflow-hidden" id="schools">
+        <div className="p-8 border-b flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div>
+            <h3 className="font-black text-xl text-gray-900 tracking-tight">Registered Institutions</h3>
+            <p className="text-sm text-gray-500 font-medium">Monitoring and management for all Nigerian schools on the platform.</p>
+          </div>
+          <div className="relative w-full md:w-80">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+            <input type="text" placeholder="Search schools or admins..." className="w-full bg-gray-50 border rounded-2xl py-3 pl-12 pr-4 text-sm font-bold outline-none focus:border-blue-600 focus:bg-white transition-all" />
           </div>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full text-left font-medium">
+          <table className="w-full text-left">
             <thead>
-              <tr className="bg-gray-50 border-b">
-                <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">School Name</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Primary Admin</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Plan</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</th>
-                <th className="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Actions</th>
+              <tr className="bg-gray-50/50">
+                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">ID</th>
+                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Institution Name</th>
+                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Main Admin</th>
+                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Subscribers</th>
+                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Plan</th>
+                <th className="px-8 py-5 text-[10px] font-black text-gray-400 uppercase tracking-widest">Status</th>
+                <th className="px-8 py-5"></th>
               </tr>
             </thead>
-            <tbody className="divide-y">
-              {schools.map(school => (
-                <tr key={school.id} className="hover:bg-gray-50/50 transition-colors cursor-pointer group">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center font-bold">
-                        {school.name[0]}
-                      </div>
-                      <p className="font-bold text-gray-900 group-hover:text-blue-600 transition-colors uppercase tracking-tight">{school.name}</p>
+            <tbody className="divide-y divide-gray-100">
+              {schools.map((school) => (
+                <tr key={school.id} className="hover:bg-gray-50/50 transition-colors group cursor-pointer">
+                  <td className="px-8 py-6 text-center">
+                    <span className="text-[10px] font-black text-gray-400 bg-gray-100 px-2 py-1 rounded">{school.id}</span>
+                  </td>
+                  <td className="px-8 py-6">
+                    <p className="font-black text-gray-900 text-sm group-hover:text-blue-600 transition-colors uppercase tracking-tight">{school.name}</p>
+                    <p className="text-xs text-gray-400 font-bold uppercase tracking-widest mt-1">Nigeria</p>
+                  </td>
+                  <td className="px-8 py-6 text-sm font-bold text-gray-600">{school.admin}</td>
+                  <td className="px-8 py-6 text-sm font-bold text-gray-900">{school.students} Students</td>
+                  <td className="px-8 py-6">
+                    <span className="text-[10px] font-black text-gray-900 uppercase tracking-widest">{school.plan}</span>
+                  </td>
+                  <td className="px-8 py-6">
+                    <div className="flex items-center gap-2">
+                      <div className={cn("w-1.5 h-1.5 rounded-full", school.status === 'Active' ? 'bg-emerald-500' : 'bg-amber-500')}></div>
+                      <span className={cn("text-[10px] font-black uppercase tracking-widest", school.status === 'Active' ? 'text-emerald-600' : 'text-amber-600')}>{school.status}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{school.admin}</td>
-                  <td className="px-6 py-4">
-                    <span className="text-xs font-black text-blue-600 bg-blue-50 px-2 py-1 rounded-md">
-                      {school.plan}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={cn(
-                      "flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest",
-                      school.status === 'Active' ? 'text-emerald-600' : 'text-amber-600'
-                    )}>
-                      <CheckCircle2 size={12} /> {school.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all">
-                      <MoreVertical size={20} />
-                    </button>
+                  <td className="px-8 py-6">
+                    <button className="text-gray-300 hover:text-gray-900 p-2"><MoreVertical size={16} /></button>
                   </td>
                 </tr>
               ))}
@@ -142,9 +128,15 @@ export default function PlatformAdminDashboard() {
         </div>
       </div>
 
-      {/* Manual Registration Modal (Simulation) */}
+      {/* Provision Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-md">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 sm:p-12">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            onClick={closeModal}
+            className="absolute inset-0 bg-gray-900/60 backdrop-blur-md"
+          />
           <motion.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -163,32 +155,32 @@ export default function PlatformAdminDashboard() {
                   <CheckCircle2 size={48} />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-3xl font-black text-gray-900 tracking-tight">Provisioning Successful!</h3>
-                  <p className="text-gray-500 font-medium">The new school workspace has been created. An invitation email with temporary credentials has been sent to the admin.</p>
+                  <h3 className="text-3xl font-black text-gray-900 tracking-tight">Provisioned!</h3>
+                  <p className="text-gray-500 font-medium leading-relaxed">The new institutional workspace is ready. Invitation sent to the school admin.</p>
                 </div>
                 <button 
                   onClick={closeModal}
-                  className="bg-gray-900 text-white px-12 py-4 rounded-2xl font-bold hover:bg-gray-800 transition-all"
+                  className="bg-gray-900 text-white px-12 py-4 rounded-2xl font-bold hover:bg-gray-800 transition-all shadow-xl shadow-gray-900/20"
                 >
                   Return to Dashboard
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleProvision} className="space-y-6">
+              <form onSubmit={handleProvision} className="space-y-8">
                 <div>
-                  <h3 className="text-2xl font-black text-gray-900 tracking-tight mb-1">Provision Tenant</h3>
-                  <p className="text-gray-500 text-sm font-medium">Create a new institutional instance and register the first admin.</p>
+                  <h3 className="text-2xl font-black text-gray-900 tracking-tight mb-2">Provision Tenant</h3>
+                  <p className="text-gray-500 text-sm font-medium">Register a new Nigeria institution and primary administrator.</p>
                 </div>
                 
                 <div className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">School Full Name</label>
+                    <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Institution Full Name</label>
                     <div className="relative">
                       <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                       <input 
                         required
                         type="text" 
-                        placeholder="Emerald City Academy" 
+                        placeholder="Nigeria International Academy" 
                         className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl py-4 pl-12 pr-4 font-bold outline-none focus:border-blue-600 focus:bg-white transition-all disabled:opacity-50"
                         disabled={isProvisioning}
                       />
@@ -203,21 +195,21 @@ export default function PlatformAdminDashboard() {
                         <input 
                           required
                           type="email" 
-                          placeholder="owner@school.com" 
+                          placeholder="head@institution.com" 
                           className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl py-4 pl-12 pr-4 font-bold outline-none focus:border-blue-600 focus:bg-white transition-all disabled:opacity-50"
                           disabled={isProvisioning}
                         />
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Initial Plan</label>
+                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Subscription Plan</label>
                       <select 
                         className="w-full bg-gray-50 border-2 border-gray-100 rounded-2xl py-4 px-4 font-bold outline-none focus:border-blue-600 focus:bg-white transition-all appearance-none cursor-pointer disabled:opacity-50"
                         disabled={isProvisioning}
                       >
                         <option>Starter (Free)</option>
                         <option>Premium (₦1,000/Std)</option>
-                        <option>Enterprise</option>
+                        <option>Global Enterprise</option>
                       </select>
                     </div>
                   </div>
@@ -227,7 +219,7 @@ export default function PlatformAdminDashboard() {
                     disabled={isProvisioning}
                     className={cn(
                       "w-full rounded-2xl py-5 font-black text-lg transition-all active:scale-[0.98] mt-4 flex items-center justify-center gap-3",
-                      isProvisioning ? "bg-gray-100 text-gray-400" : "bg-blue-600 text-white shadow-xl shadow-blue-600/30 hover:bg-blue-700"
+                      isProvisioning ? "bg-gray-100 text-gray-400" : "bg-blue-600 text-white shadow-xl shadow-blue-600/30 hover:bg-blue-700 hover:shadow-blue-600/40"
                     )}
                   >
                     {isProvisioning ? (
@@ -236,12 +228,12 @@ export default function PlatformAdminDashboard() {
                         Syncing Tenant Data...
                       </>
                     ) : (
-                      'Provision School Account'
+                      'Provision Institutional Account'
                     )}
                   </button>
 
-                  <p className="text-[10px] text-gray-400 text-center font-bold uppercase tracking-widest">
-                    This will create a unique sub-domain and database partition
+                  <p className="text-[10px] text-gray-400 text-center font-bold uppercase tracking-widest px-10 leading-relaxed">
+                    This triggers a unique database partition and institutional ID generation.
                   </p>
                 </div>
               </form>

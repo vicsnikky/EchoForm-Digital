@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 export type UserRole = 'admin' | 'teacher' | 'parent' | 'student' | 'bursar' | 'gate' | 'platform_admin';
@@ -12,12 +7,12 @@ interface User {
   name: string;
   email: string;
   role: UserRole;
-  schoolId: string;
+  schoolId?: string;
+  admissionNo?: string;
 }
 
 interface AuthContextType {
   user: User | null;
-  role: UserRole | null;
   loading: boolean;
   login: (email: string, role: UserRole) => Promise<void>;
   logout: () => void;
@@ -29,23 +24,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Mock auto-login for development simulation
   useEffect(() => {
-    const saved = localStorage.getItem('schoolpulse_user');
-    if (saved) {
-      setUser(JSON.parse(saved));
+    // Simulate auth check
+    const savedUser = localStorage.getItem('schoolpulse_user');
+    if (savedUser) {
+      setUser(JSON.parse(savedUser));
     }
     setLoading(false);
   }, []);
 
   const login = async (email: string, role: UserRole) => {
-    // Simulating a login
     const mockUser: User = {
-      id: 'u123',
-      name: email.split('@')[0],
-      email: email,
-      role: role,
-      schoolId: 's456'
+      id: '1',
+      name: role === 'platform_admin' ? 'Global Admin' : (role === 'admin' ? 'School Admin' : 'User'),
+      email,
+      role,
+      schoolId: 'SCH-8241-PLS',
+      admissionNo: 'ADM-2026-001'
     };
     setUser(mockUser);
     localStorage.setItem('schoolpulse_user', JSON.stringify(mockUser));
@@ -57,7 +52,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, role: user?.role || null, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

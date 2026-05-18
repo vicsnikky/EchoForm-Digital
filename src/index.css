@@ -1,22 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@400;600;700;800;900&display=swap');
-@import "tailwindcss";
-
-@theme {
-  --font-sans: "Inter", "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Nunito Sans", ui-sans-serif, system-ui, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 @layer base {
-  html {
-    @apply antialiased scroll-smooth;
+  body {
+    @apply antialiased text-gray-900 bg-white;
   }
 }
 
 .animate-in {
-  animation: enter 0.5s ease-out;
+  animation: animate-in 0.5s ease-out;
 }
 
-@keyframes enter {
+@keyframes animate-in {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -26,4 +22,3 @@
     transform: translateY(0);
   }
 }
-

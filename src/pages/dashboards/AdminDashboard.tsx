@@ -2,13 +2,11 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { 
   Users, 
-  ClipboardCheck, 
-  CreditCard, 
+  BookOpen, 
   TrendingUp, 
-  ArrowUpRight, 
-  Calendar,
-  MoreVertical,
-  CheckCircle2,
+  Calendar, 
+  MoreVertical, 
+  CheckCircle2, 
   Clock,
   UserPlus,
   Shield,
@@ -16,22 +14,15 @@ import {
   FileText,
   AlertCircle
 } from 'lucide-react';
-import { formatCurrency } from '../../lib/utils';
+import { formatCurrency, cn } from '../../lib/utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
-
-const data = [
-  { name: 'Week 1', attendance: 92, fees: 450000 },
-  { name: 'Week 2', attendance: 88, fees: 320000 },
-  { name: 'Week 3', attendance: 95, fees: 580000 },
-  { name: 'Week 4', attendance: 91, fees: 610000 },
-];
 
 export default function AdminDashboard() {
   const stats = [
-    { title: 'Total Students', value: '1,248', change: '+12', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
-    { title: 'Avg Attendance', value: '91%', change: '+3%', icon: ClipboardCheck, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-    { title: 'Fees Collected', value: formatCurrency(1850000), change: '+₦240k', icon: CreditCard, color: 'text-amber-600', bg: 'bg-amber-50' },
-    { title: 'Performance', value: '74%', change: '+2%', icon: TrendingUp, color: 'text-purple-600', bg: 'bg-purple-50' },
+    { label: 'Total Students', value: '450', change: '+12%', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
+    { label: 'Teachers', value: '32', change: '+2', icon: Shield, color: 'text-emerald-600', bg: 'bg-emerald-50' },
+    { label: 'Avg Attendance', value: '94%', change: 'Stable', icon: CheckCircle2, color: 'text-amber-600', bg: 'bg-amber-50' },
+    { label: 'Revenue (Term 2)', value: '₦4.2M', change: '+15%', icon: TrendingUp, color: 'text-purple-600', bg: 'bg-purple-50' },
   ];
 
   return (
@@ -41,7 +32,7 @@ export default function AdminDashboard() {
         <div>
           <p className="text-blue-600 font-medium text-sm">Main Campus Administration</p>
           <div className="flex items-center gap-3">
-            <h2 className="text-3xl font-bold text-gray-900 tracking-tight">School Overview</h2>
+            <h2 className="text-3xl font-bold text-gray-900 tracking-tight text-center">School Overview</h2>
             <div className="bg-gray-900 text-emerald-400 px-3 py-1 rounded-lg text-[10px] font-black tracking-widest mt-1">
               ID: SCH-8241-PLS
             </div>
@@ -54,65 +45,47 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat, i) => (
-          <motion.div
-            key={stat.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="bg-white p-6 rounded-2xl border shadow-sm hover:shadow-md transition-shadow group cursor-pointer"
-          >
-            <div className="flex items-start justify-between">
-              <div className={cn("p-3 rounded-xl transition-colors group-hover:bg-white border", stat.bg)}>
-                <stat.icon size={24} className={stat.color} />
+          <div key={i} className="bg-white p-6 rounded-2xl border shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-start justify-between mb-4">
+              <div className={cn("p-3 rounded-xl", stat.bg, stat.color)}>
+                <stat.icon size={24} />
               </div>
-              <div className="flex items-center gap-1 text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full text-xs font-bold">
+              <span className={cn("text-xs font-bold px-2 py-1 rounded-full", 
+                stat.change.startsWith('+') ? "bg-emerald-50 text-emerald-600" : "bg-gray-50 text-gray-400"
+              )}>
                 {stat.change}
-                <ArrowUpRight size={12} />
-              </div>
+              </span>
             </div>
-            <div className="mt-4">
-              <p className="text-sm text-gray-500 font-medium">{stat.title}</p>
-              <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
-            </div>
-          </motion.div>
+            <p className="text-sm font-medium text-gray-500">{stat.label}</p>
+            <p className="text-2xl font-bold text-gray-900 mt-1">{stat.value}</p>
+          </div>
         ))}
       </div>
 
-      {/* Main Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-white p-6 rounded-2xl border shadow-sm">
-          <div className="flex items-center justify-between mb-8">
-            <div>
-              <h3 className="font-bold text-gray-900 text-lg">Financial Performance</h3>
-              <p className="text-sm text-gray-500">Revenue and fee collection trends</p>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Registration Quick Start */}
+        <div className="bg-gray-900 text-white p-8 rounded-[32px] shadow-2xl relative overflow-hidden lg:col-span-1">
+          <div className="relative z-10">
+            <h3 className="text-2xl font-black mb-2 tracking-tight">Staff Management</h3>
+            <p className="text-gray-400 text-sm mb-8 font-medium leading-relaxed">Register new teachers and assign their institutional roles.</p>
+            <div className="space-y-4">
+              <button className="w-full bg-blue-600 text-white px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-blue-500 transition-all active:scale-95 shadow-xl shadow-blue-600/20">
+                <UserPlus size={18} /> Register Teacher
+              </button>
+              <button className="w-full bg-white/10 text-white px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-white/20 transition-all active:scale-95">
+                <Users size={18} /> View All Staff
+              </button>
             </div>
-            <select className="text-sm border rounded-lg px-3 py-1.5 focus:ring-2 ring-blue-100 outline-none">
-              <option>Last 4 Weeks</option>
-              <option>This Term</option>
-            </select>
           </div>
-          <div className="h-[300px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F3F4F6" />
-                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 12}} dy={10} />
-                <YAxis axisLine={false} tickLine={false} tick={{fill: '#9CA3AF', fontSize: 12}} />
-                <Tooltip 
-                  cursor={{fill: '#F9FAFB'}}
-                  contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'}}
-                />
-                <Bar dataKey="fees" fill="#2563EB" radius={[4, 4, 0, 0]} barSize={40} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+          <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-600/10 rounded-full blur-3xl"></div>
         </div>
 
         <div className="bg-white p-6 rounded-2xl border shadow-sm">
-          <h3 className="font-bold text-gray-900 text-lg mb-6 flex items-center justify-between">
+          <h3 className="font-bold text-gray-900 text-lg mb-6 flex items-center justify-between space-x-12">
             Staff Vetting
-            <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-2 py-1 rounded">Action Required</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-amber-600 bg-amber-50 px-2 py-1 rounded ml-2">Action Required</span>
           </h3>
           <div className="space-y-4">
             {[
@@ -142,33 +115,37 @@ export default function AdminDashboard() {
             </button>
           </div>
         </div>
-      </div>
 
-      {/* Recent Activity */}
-      <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b bg-gray-50/50 flex items-center justify-between">
-          <h3 className="font-bold text-gray-900">Recent Activity</h3>
-          <button className="text-blue-600 text-xs font-bold hover:underline">View Log</button>
-        </div>
-        <div className="divide-y">
-          {[
-            { action: 'Attendance marked', detail: 'SS2 Science - 100% present', time: '10 mins ago', icon: CheckCircle2, color: 'text-emerald-500' },
-            { action: 'Result submitted', detail: 'Primary 4 English (Week 5 Test)', time: '45 mins ago', icon: Clock, color: 'text-amber-500' },
-            { action: 'Fee payment', detail: '₦125,000 via Bank Transfer (Zainab A.)', time: '2 hours ago', icon: CreditCard, color: 'text-blue-500' },
-          ].map((activity, i) => (
-            <div key={i} className="px-6 py-4 flex items-center gap-4">
-              <activity.icon size={18} className={activity.color} />
-              <div>
-                <p className="text-sm font-semibold text-gray-900">{activity.action}</p>
-                <p className="text-xs text-gray-500">{activity.detail}</p>
-              </div>
-              <span className="ml-auto text-xs text-gray-400">{activity.time}</span>
+        <div className="bg-white p-6 rounded-2xl border shadow-sm">
+          <h3 className="font-bold text-gray-900 text-lg mb-6">Financial Overview</h3>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={[
+                { name: 'Wk 1', val: 1.2 },
+                { name: 'Wk 2', val: 0.8 },
+                { name: 'Wk 3', val: 1.5 },
+                { name: 'Wk 4', val: 0.7 },
+              ]}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: '#9ca3af' }} />
+                <YAxis hide />
+                <Tooltip 
+                  cursor={{ fill: '#f9f9fb' }}
+                  contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}
+                />
+                <Bar dataKey="val" fill="#2563eb" radius={[4, 4, 4, 4]} barSize={32} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-4 flex items-center justify-between border-t pt-4">
+            <div>
+              <p className="text-[10px] font-bold text-gray-400 uppercase">Total Revenue</p>
+              <p className="text-xl font-bold text-gray-900">₦4,241,500</p>
             </div>
-          ))}
+            <button className="text-xs font-bold text-blue-600 hover:underline">Full Report</button>
+          </div>
         </div>
       </div>
     </div>
   );
 }
-
-import { cn } from '../../lib/utils';

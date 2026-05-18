@@ -2,31 +2,31 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { LayoutDashboard, Users, BookOpen, CreditCard, ClipboardCheck, Settings, LogOut, Menu, Bell, Building2 } from 'lucide-react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth, UserRole } from '../../contexts/AuthContext';
 import { cn } from '../../lib/utils';
 
 export default function DashboardLayout() {
-  const { user, logout, role } = useAuth();
+  const { user, logout } = useAuth();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   const getMenuItems = () => {
-    if (role === 'platform_admin') {
+    if (user?.role === 'platform_admin') {
       return [
         { title: 'Global Overview', icon: LayoutDashboard, path: '/dashboard/platform' },
-        { title: 'Manage Schools', icon: Building2, path: '/dashboard/platform#schools' },
-        { title: 'Revenue Docs', icon: CreditCard, path: '/dashboard/fees' },
-        { title: 'Settings', icon: Settings, path: '/dashboard/settings' },
+        { title: 'Manage Schools', icon: Building2, path: '/dashboard/platform' },
+        { title: 'Revenue Docs', icon: CreditCard, path: '/dashboard/results' }, // Placeholder
+        { title: 'Settings', icon: Settings, path: '/dashboard/platform' },
       ];
     }
     
     return [
-      { title: 'Overview', icon: LayoutDashboard, path: `/dashboard/${role}` },
+      { title: 'Overview', icon: LayoutDashboard, path: `/dashboard/${user?.role || 'admin'}` },
       { title: 'Attendance', icon: ClipboardCheck, path: '/dashboard/attendance' },
       { title: 'Results', icon: BookOpen, path: '/dashboard/results' },
-      { title: 'Fees', icon: CreditCard, path: '/dashboard/fees' },
-      { title: 'Students', icon: Users, path: '/dashboard/students' },
-      { title: 'Settings', icon: Settings, path: '/dashboard/settings' },
+      { title: 'Fees', icon: CreditCard, path: '/dashboard/attendance' }, // Placeholder
+      { title: 'Students', icon: Users, path: '/dashboard/attendance' }, // Placeholder
+      { title: 'Settings', icon: Settings, path: '/dashboard/attendance' }, // Placeholder
     ];
   };
 
@@ -35,104 +35,96 @@ export default function DashboardLayout() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row">
       {/* Mobile Header */}
-      <header className="md:hidden bg-blue-900 text-white p-4 flex items-center justify-between sticky top-0 z-50 shadow-md">
+      <div className="md:hidden bg-white border-b px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <div className="w-8 h-8 bg-emerald-500 rounded-lg flex items-center justify-center font-bold text-white">S</div>
-          <span className="font-bold tracking-tight">SchoolPulse</span>
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white">
+            <Building2 size={16} />
+          </div>
+          <span className="font-bold text-lg">SchoolPulse</span>
         </div>
-        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-blue-800 rounded-full transition-colors">
+        <button onClick={() => setIsSidebarOpen(!isSidebarOpen)} className="p-2 hover:bg-gray-100 rounded-lg">
           <Menu size={24} />
         </button>
-      </header>
+      </div>
 
       {/* Sidebar */}
       <aside className={cn(
-        "fixed inset-y-0 left-0 z-40 w-64 bg-blue-900 text-white transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 pt-20 md:pt-0",
+        "fixed inset-0 z-40 md:relative md:z-auto w-72 bg-white border-r px-6 py-8 transform transition-transform duration-300 md:translate-x-0",
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="hidden md:flex items-center gap-2 p-6 mb-4">
-          <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center font-bold text-white text-xl shadow-lg shadow-emerald-500/20">S</div>
-          <span className="text-xl font-bold tracking-tight">SchoolPulse</span>
+        <div className="flex items-center gap-3 mb-12 px-2">
+          <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+            <Building2 size={24} />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-black text-xl tracking-tight text-gray-900 leading-none">SchoolPulse</span>
+            <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-1">Nigeria Edition</span>
+          </div>
         </div>
 
-        <nav className="px-4 space-y-1">
+        <nav className="space-y-2">
           {menuItems.map((item) => (
             <Link
               key={item.path}
               to={item.path}
               onClick={() => setIsSidebarOpen(false)}
               className={cn(
-                "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative",
+                "flex items-center gap-4 px-4 py-4 rounded-2xl font-bold text-sm transition-all group",
                 location.pathname === item.path 
-                  ? "bg-white/10 text-white font-medium" 
-                  : "text-blue-100 hover:bg-white/5 hover:text-white"
+                  ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30" 
+                  : "text-gray-400 hover:text-gray-900 hover:bg-gray-50 px-2"
               )}
             >
-              <item.icon size={20} className={cn(
-                "transition-transform group-hover:scale-110",
-                location.pathname === item.path ? "text-emerald-400" : "text-blue-300"
-              )} />
+              <item.icon size={20} className={cn(location.pathname === item.path ? "text-white" : "text-gray-400 group-hover:text-gray-900")} />
               {item.title}
-              {location.pathname === item.path && (
-                <motion.div 
-                  layoutId="sidebar-active"
-                  className="absolute left-0 w-1 h-6 bg-emerald-400 rounded-r-full"
-                />
-              )}
             </Link>
           ))}
         </nav>
 
-        <div className="absolute bottom-8 left-0 w-full px-8">
+        <div className="absolute bottom-10 left-6 right-6">
           <button 
             onClick={logout}
-            className="flex items-center gap-3 text-blue-300 hover:text-white transition-colors w-full group"
+            className="w-full flex items-center gap-4 px-4 py-4 rounded-2xl font-bold text-sm text-red-500 hover:bg-red-50 transition-all"
           >
-            <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
+            <LogOut size={20} />
             Sign Out
           </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col min-w-0">
-        {/* Top bar (Desktop) */}
-        <header className="hidden md:flex h-16 bg-white border-b items-center justify-between px-8 sticky top-0 z-30">
-          <div>
-            <h1 className="text-gray-900 font-semibold text-lg">
-              {menuItems.find(i => i.path === location.pathname)?.title || 'Dashboard'}
-            </h1>
-          </div>
+      <main className="flex-1 overflow-y-auto">
+        {/* Top Header */}
+        <header className="hidden md:flex bg-white px-10 h-24 items-center justify-between border-b sticky top-0 z-10">
           <div className="flex items-center gap-4">
-            <button className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-all relative">
-              <Bell size={20} />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+            <h1 className="font-black text-2xl text-gray-900 tracking-tight">Dashboard</h1>
+            <span className="text-gray-300">/</span>
+            <span className="text-sm font-bold text-gray-400 uppercase tracking-widest">
+              {location.pathname.split('/').pop()}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-6">
+            <button className="relative w-12 h-12 flex items-center justify-center rounded-2xl border hover:bg-gray-50 transition-all">
+              <Bell size={20} className="text-gray-400" />
+              <span className="absolute top-3 right-3 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
             </button>
-            <div className="flex items-center gap-3 pl-4 border-l">
+            <div className="flex items-center gap-4 pl-6 border-l">
               <div className="text-right">
-                <p className="text-sm font-medium text-gray-900">{user?.name}</p>
-                <p className="text-xs text-gray-500 capitalize">{role}</p>
+                <p className="text-sm font-bold text-gray-900">{user?.name}</p>
+                <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{user?.role.replace('_', ' ')}</p>
               </div>
-              <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center font-bold border-2 border-blue-50 ring-2 ring-blue-50/50">
-                {user?.name?.[0]?.toUpperCase()}
+              <div className="w-12 h-12 bg-gray-100 rounded-2xl border-2 border-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-gray-400">
+                {user?.name?.[0]}
               </div>
             </div>
           </div>
         </header>
 
-        {/* Dynamic Page Content */}
-        <div className="p-4 md:p-8 flex-1 max-w-7xl w-full mx-auto">
+        <div className="p-6 md:p-10">
           <Outlet />
         </div>
       </main>
-
-      {/* Backdrop for mobile */}
-      {isSidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-30 md:hidden"
-          onClick={() => setIsSidebarOpen(false)}
-        />
-      )}
     </div>
   );
 }
