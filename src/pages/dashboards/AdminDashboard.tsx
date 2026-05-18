@@ -12,12 +12,58 @@ import {
   Shield,
   Bell,
   FileText,
-  AlertCircle
+  AlertCircle,
+  MessageSquare,
+  Trash2,
+  AlertTriangle,
+  Lightbulb
 } from 'lucide-react';
 import { formatCurrency, cn } from '../../lib/utils';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
+
+interface Message {
+  id: string;
+  type: 'complaint' | 'suggestion';
+  content: string;
+  parentName: string;
+  createdAt: string;
+  schoolId: string;
+}
 
 export default function AdminDashboard() {
+  const { user } = useAuth();
+  const [messages, setMessages] = React.useState<Message[]>([]);
+  const [loadingMessages, setLoadingMessages] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchMessages = () => {
+      setLoadingMessages(true);
+      // Simulate fetching from Django
+      setTimeout(() => {
+        const stored = JSON.parse(localStorage.getItem('pulse_demo_messages') || '[]');
+        const filtered = stored.filter((m: Message) => m.schoolId === (user?.schoolId || 'SCH-8241-PLS'));
+        setMessages(filtered);
+        setLoadingMessages(false);
+      }, 500);
+    };
+
+    fetchMessages();
+    
+    // Listen for storage changes in same tab (for simulation)
+    const handleStorage = () => fetchMessages();
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, [user?.schoolId]);
+
+  const handleDeleteMessage = async (id: string) => {
+    const stored = JSON.parse(localStorage.getItem('pulse_demo_messages') || '[]');
+    const updated = stored.filter((m: Message) => m.id !== id);
+    localStorage.setItem('pulse_demo_messages', JSON.stringify(updated));
+    setMessages(prev => prev.filter(m => m.id !== id));
+  };
+
   const stats = [
     { label: 'Total Students', value: '450', change: '+12%', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50' },
     { label: 'Teachers', value: '32', change: '+2', icon: Shield, color: 'text-emerald-600', bg: 'bg-emerald-50' },
@@ -71,12 +117,12 @@ export default function AdminDashboard() {
             <h3 className="text-2xl font-black mb-2 tracking-tight">Staff Management</h3>
             <p className="text-gray-400 text-sm mb-8 font-medium leading-relaxed">Register new teachers and assign their institutional roles.</p>
             <div className="space-y-4">
-              <button className="w-full bg-blue-600 text-white px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-blue-500 transition-all active:scale-95 shadow-xl shadow-blue-600/20">
+              <Link to="/dashboard/staff" className="w-full bg-blue-600 text-white px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-blue-500 transition-all active:scale-95 shadow-xl shadow-blue-600/20 text-center">
                 <UserPlus size={18} /> Register Teacher
-              </button>
-              <button className="w-full bg-white/10 text-white px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-white/20 transition-all active:scale-95">
+              </Link>
+              <Link to="/dashboard/staff" className="w-full bg-white/10 text-white px-6 py-4 rounded-2xl font-black text-xs uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-white/20 transition-all active:scale-95 text-center">
                 <Users size={18} /> View All Staff
-              </button>
+              </Link>
             </div>
           </div>
           <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-blue-600/10 rounded-full blur-3xl"></div>
@@ -145,6 +191,79 @@ export default function AdminDashboard() {
             <button className="text-xs font-bold text-blue-600 hover:underline">Full Report</button>
           </div>
         </div>
+      </div>
+
+      {/* Parent Feedback Section */}
+      <div className="bg-white p-8 rounded-[40px] border shadow-sm">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center">
+              <MessageSquare size={24} />
+            </div>
+            <div>
+              <h3 className="text-xl font-black text-gray-900 tracking-tight uppercase">Parental Feedback</h3>
+              <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Inbox for complaints and suggestions</p>
+            </div>
+          </div>
+          <div className="bg-gray-100 px-4 py-2 rounded-full font-black text-[10px] text-gray-500 uppercase tracking-widest">
+            {messages.length} Messages
+          </div>
+        </div>
+
+        {loadingMessages ? (
+          <div className="py-20 text-center">
+            <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p className="text-xs font-black text-gray-400 uppercase tracking-widest">Loading Inbox...</p>
+          </div>
+        ) : messages.length === 0 ? (
+          <div className="py-20 text-center bg-gray-50 rounded-[32px] border border-dashed">
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+              <Shield size={24} className="text-gray-200" />
+            </div>
+            <p className="text-sm font-bold text-gray-900 uppercase tracking-tight">No messages yet</p>
+            <p className="text-xs text-gray-400 px-8 mt-1 italic">When parents send complaints or suggestions, they will appear here.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {messages.map((msg) => (
+              <motion.div 
+                layout
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                key={msg.id} 
+                className="group bg-gray-50 p-6 rounded-[32px] border relative hover:border-blue-200 transition-all cursor-default"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className={cn(
+                    "flex items-center gap-2 px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest",
+                    msg.type === 'complaint' ? "bg-red-50 text-red-600" : "bg-emerald-50 text-emerald-600"
+                  )}>
+                    {msg.type === 'complaint' ? <AlertTriangle size={12} /> : <Lightbulb size={12} />}
+                    {msg.type}
+                  </div>
+                  <button 
+                    onClick={() => handleDeleteMessage(msg.id)}
+                    className="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
+                <p className="text-sm font-bold text-gray-900 leading-relaxed mb-6">{msg.content}</p>
+                <div className="flex items-center justify-between border-t border-dashed border-gray-200 pt-4 mt-auto">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px] font-black">
+                      {msg.parentName.substring(0, 2).toUpperCase()}
+                    </div>
+                    <p className="text-[10px] font-black text-gray-900 uppercase tracking-tight">{msg.parentName}</p>
+                  </div>
+                  <p className="text-[10px] font-bold text-gray-400 uppercase">
+                    {new Date(msg.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

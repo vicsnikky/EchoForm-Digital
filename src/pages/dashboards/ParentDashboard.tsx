@@ -11,17 +11,58 @@ import {
   MessageCircle,
   ArrowRight,
   TrendingUp,
-  Award
+  Award,
+  Send,
+  AlertTriangle,
+  Lightbulb
 } from 'lucide-react';
 import { cn, formatCurrency } from '../../lib/utils';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function ParentDashboard() {
+  const { user } = useAuth();
+  const [messageType, setMessageType] = React.useState<'complaint' | 'suggestion'>('suggestion');
+  const [messageContent, setMessageContent] = React.useState('');
+  const [submitting, setSubmitting] = React.useState(false);
+  const [success, setSuccess] = React.useState(false);
+  
   const children = [
     { id: '1', name: 'Ifeoluwa Okoro', class: 'JSS3 B', status: 'In School', avatar: 'IO' },
     { id: '2', name: 'Chisom Okoro', class: 'Primary 4', status: 'At Home', avatar: 'CO' },
   ];
 
   const [selectedChild, setSelectedChild] = React.useState(children[0]);
+
+  const handleSubmitMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!user || !messageContent.trim()) return;
+
+    setSubmitting(true);
+    try {
+      // Simulation of sending to a Django backend in the future
+      // For now, we use local storage to show it's working in the preview
+      const newMessage = {
+        id: Math.random().toString(36).substr(2, 9),
+        type: messageType,
+        content: messageContent,
+        parentId: user.id,
+        parentName: user.name,
+        schoolId: user.schoolId || 'SCH-8241-PLS',
+        createdAt: new Date().toISOString()
+      };
+
+      const existingMessages = JSON.parse(localStorage.getItem('pulse_demo_messages') || '[]');
+      localStorage.setItem('pulse_demo_messages', JSON.stringify([newMessage, ...existingMessages]));
+
+      setMessageContent('');
+      setSuccess(true);
+      setTimeout(() => setSuccess(false), 5000);
+    } catch (error) {
+      console.error('Error sending message:', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -166,6 +207,77 @@ export default function ParentDashboard() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Complaints & Suggestions Section */}
+      <div className="bg-white p-8 rounded-[40px] border shadow-sm max-w-2xl mx-auto">
+        <div className="flex items-center gap-4 mb-8">
+          <div className="w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center">
+            <MessageCircle size={24} />
+          </div>
+          <div>
+            <h3 className="text-xl font-black text-gray-900 tracking-tight uppercase">Feedback & Appeals</h3>
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Share your thoughts with the school board</p>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmitMessage} className="space-y-6">
+          <div className="flex gap-4 p-1 bg-gray-50 rounded-2xl border">
+            <button
+              type="button"
+              onClick={() => setMessageType('suggestion')}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all",
+                messageType === 'suggestion' ? "bg-white text-emerald-600 shadow-sm border border-emerald-100" : "text-gray-400 hover:text-gray-600"
+              )}
+            >
+              <Lightbulb size={16} /> Suggestion
+            </button>
+            <button
+              type="button"
+              onClick={() => setMessageType('complaint')}
+              className={cn(
+                "flex-1 flex items-center justify-center gap-2 py-3 rounded-xl font-black text-xs uppercase tracking-widest transition-all",
+                messageType === 'complaint' ? "bg-white text-red-600 shadow-sm border border-red-100" : "text-gray-400 hover:text-gray-600"
+              )}
+            >
+              <AlertTriangle size={16} /> Complaint
+            </button>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest pl-1">Detailed Message</label>
+            <textarea
+              value={messageContent}
+              onChange={(e) => setMessageContent(e.target.value)}
+              placeholder={messageType === 'suggestion' ? "Tell us how we can improve..." : "Describe the issue or concern..."}
+              rows={4}
+              className="w-full bg-gray-50 border-2 border-gray-100 rounded-3xl p-6 font-bold outline-none focus:border-blue-600 focus:bg-white transition-all resize-none"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting || !messageContent.trim()}
+            className={cn(
+              "w-full flex items-center justify-center gap-2 py-5 rounded-3xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl disabled:opacity-50",
+              success ? "bg-emerald-500 text-white shadow-emerald-500/20" : "bg-blue-600 text-white shadow-blue-600/20 hover:bg-blue-700"
+            )}
+          >
+            {submitting ? "Sending..." : success ? "Message Received!" : (
+              <>
+                Submit {messageType} <Send size={18} />
+              </>
+            )}
+          </button>
+          
+          {success && (
+            <p className="text-center text-xs font-bold text-emerald-600 uppercase tracking-widest animate-bounce">
+              Thank you! Your feedback has been sent directly to the Admin.
+            </p>
+          )}
+        </form>
       </div>
     </div>
   );

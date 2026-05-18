@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { LayoutDashboard, Users, BookOpen, CreditCard, ClipboardCheck, Settings, LogOut, Menu, Bell, Building2 } from 'lucide-react';
+import { LayoutDashboard, Users, BookOpen, CreditCard, ClipboardCheck, Settings, LogOut, Menu, Bell, Building2, Shield } from 'lucide-react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth, UserRole } from '../../contexts/AuthContext';
 import { cn } from '../../lib/utils';
@@ -11,22 +11,64 @@ export default function DashboardLayout() {
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
 
   const getMenuItems = () => {
-    if (user?.role === 'platform_admin') {
+    const roles = user?.roles || [];
+    const isPlatformAdmin = roles.includes('platform_admin');
+    const isAdmin = roles.includes('admin');
+    const isBursar = roles.includes('bursar');
+    const isTeacher = roles.includes('teacher');
+    const isClassTeacher = roles.includes('class_teacher');
+    const isSubjectTeacher = roles.includes('subject_teacher');
+    const isParent = roles.includes('parent');
+
+    if (isPlatformAdmin) {
       return [
         { title: 'Global Overview', icon: LayoutDashboard, path: '/dashboard/platform' },
-        { title: 'Manage Schools', icon: Building2, path: '/dashboard/platform' },
-        { title: 'Revenue Docs', icon: CreditCard, path: '/dashboard/results' }, // Placeholder
-        { title: 'Settings', icon: Settings, path: '/dashboard/platform' },
+        { title: 'Manage Schools', icon: Building2, path: '/dashboard/schools' },
+        { title: 'Revenue Docs', icon: CreditCard, path: '/dashboard/revenue' },
+        { title: 'Settings', icon: Settings, path: '/dashboard/settings' },
+      ];
+    }
+    
+    if (isAdmin || isBursar) {
+      const primaryPath = isAdmin ? 'admin' : 'bursar';
+      return [
+        { title: 'Overview', icon: LayoutDashboard, path: `/dashboard/${primaryPath}` },
+        { title: 'Staff', icon: Shield, path: '/dashboard/staff' },
+        { title: 'Students', icon: Users, path: '/dashboard/students' },
+        ...(isAdmin ? [{ title: 'Attendance', icon: ClipboardCheck, path: '/dashboard/attendance' }] : []),
+        ...(isAdmin ? [{ title: 'Results', icon: BookOpen, path: '/dashboard/results' }] : []),
+        { title: 'Fees', icon: CreditCard, path: '/dashboard/fees' },
+        { title: 'Settings', icon: Settings, path: '/dashboard/settings' },
+      ];
+    }
+    
+    if (isTeacher) {
+      return [
+        { title: 'Overview', icon: LayoutDashboard, path: '/dashboard/teacher' },
+        { title: 'Attendance', icon: ClipboardCheck, path: '/dashboard/attendance' },
+        { title: 'Results', icon: BookOpen, path: '/dashboard/results' },
+        { title: 'Fees', icon: CreditCard, path: '/dashboard/fees' },
+        { title: 'Students', icon: Users, path: '/dashboard/students' },
+        { title: 'Settings', icon: Settings, path: '/dashboard/settings' },
+      ];
+    }
+
+    if (isParent) {
+      return [
+        { title: 'Overview', icon: LayoutDashboard, path: '/dashboard/parent' },
+        { title: 'Fee Portal', icon: CreditCard, path: '/dashboard/fees' },
+        { title: 'Attendance', icon: ClipboardCheck, path: '/dashboard/attendance' },
+        { title: 'Results', icon: BookOpen, path: '/dashboard/results' },
       ];
     }
     
     return [
-      { title: 'Overview', icon: LayoutDashboard, path: `/dashboard/${user?.role || 'admin'}` },
+      { title: 'Overview', icon: LayoutDashboard, path: `/dashboard/${roles[0] || 'admin'}` },
       { title: 'Attendance', icon: ClipboardCheck, path: '/dashboard/attendance' },
       { title: 'Results', icon: BookOpen, path: '/dashboard/results' },
-      { title: 'Fees', icon: CreditCard, path: '/dashboard/attendance' }, // Placeholder
-      { title: 'Students', icon: Users, path: '/dashboard/attendance' }, // Placeholder
-      { title: 'Settings', icon: Settings, path: '/dashboard/attendance' }, // Placeholder
+      { title: 'Fees', icon: CreditCard, path: '/dashboard/fees' },
+      { title: 'Students', icon: Users, path: '/dashboard/students' },
+      { title: 'Settings', icon: Settings, path: '/dashboard/settings' },
     ];
   };
 
@@ -65,7 +107,7 @@ export default function DashboardLayout() {
         <nav className="space-y-2">
           {menuItems.map((item) => (
             <Link
-              key={item.path}
+              key={item.title}
               to={item.path}
               onClick={() => setIsSidebarOpen(false)}
               className={cn(
@@ -112,7 +154,10 @@ export default function DashboardLayout() {
             <div className="flex items-center gap-4 pl-6 border-l">
               <div className="text-right">
                 <p className="text-sm font-bold text-gray-900">{user?.name}</p>
-                <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest">{user?.role.replace('_', ' ')}</p>
+                <p className="text-[10px] font-black text-blue-600 uppercase tracking-widest leading-none">
+                  {user?.roles?.[0].replace('_', ' ')}
+                  {user?.roles && user.roles.length > 1 && <span className="block text-[8px] text-gray-400">+{user.roles.length - 1} more</span>}
+                </p>
               </div>
               <div className="w-12 h-12 bg-gray-100 rounded-2xl border-2 border-white shadow-sm overflow-hidden flex items-center justify-center font-bold text-gray-400">
                 {user?.name?.[0]}

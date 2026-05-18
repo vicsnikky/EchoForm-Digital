@@ -1,12 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type UserRole = 'admin' | 'teacher' | 'parent' | 'student' | 'bursar' | 'gate' | 'platform_admin';
+export type UserRole = 'admin' | 'teacher' | 'parent' | 'student' | 'bursar' | 'gate' | 'platform_admin' | 'subject_teacher' | 'class_teacher';
 
 interface User {
   id: string;
   name: string;
   email: string;
-  role: UserRole;
+  roles: UserRole[];
   schoolId?: string;
   admissionNo?: string;
 }
@@ -14,7 +14,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   loading: boolean;
-  login: (email: string, role: UserRole) => Promise<void>;
+  login: (email: string, roles: UserRole[]) => Promise<void>;
   logout: () => void;
 }
 
@@ -33,17 +33,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setLoading(false);
   }, []);
 
-  const login = async (email: string, role: UserRole) => {
+  const login = async (email: string, roles: UserRole[]) => {
+    setLoading(true);
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    const primaryRole = roles[0];
     const mockUser: User = {
       id: '1',
-      name: role === 'platform_admin' ? 'Global Admin' : (role === 'admin' ? 'School Admin' : 'User'),
+      name: primaryRole === 'platform_admin' ? 'Global Admin' : (primaryRole === 'admin' ? 'School Admin' : (primaryRole === 'parent' ? 'Ifeoluwa Parent' : 'Staff User')),
       email,
-      role,
+      roles,
       schoolId: 'SCH-8241-PLS',
-      admissionNo: 'ADM-2026-001'
+      admissionNo: primaryRole === 'parent' ? 'ADM-2026-001' : undefined
     };
+    
     setUser(mockUser);
     localStorage.setItem('schoolpulse_user', JSON.stringify(mockUser));
+    setLoading(false);
   };
 
   const logout = () => {

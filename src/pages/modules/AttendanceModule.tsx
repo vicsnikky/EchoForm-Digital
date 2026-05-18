@@ -10,11 +10,16 @@ import {
   XCircle,
   Clock,
   ChevronRight,
-  MoreVertical
+  MoreVertical,
+  Lock
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { useAuth } from '../../contexts/AuthContext';
 
 export default function AttendanceModule() {
+  const { user } = useAuth();
+  const isClassTeacher = user?.roles.includes('class_teacher') || user?.roles.includes('admin');
+
   const students = [
     { id: '1', name: 'Ifeoluwa Okoro', status: 'Present', time: '07:45 AM', streak: 12 },
     { id: '2', name: 'Musa Garba', status: 'Absent', time: '-', streak: 0 },
@@ -28,16 +33,22 @@ export default function AttendanceModule() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Attendance Tracking</h2>
-          <p className="text-gray-500 text-sm">Term 2, Week 6 • Tuesday, June 16, 2026</p>
+          <h2 className="text-2xl font-bold text-gray-900 tracking-tight text-center sm:text-left">Attendance Tracking</h2>
+          <p className="text-gray-500 text-sm text-center sm:text-left">Term 2, Week 6 • Tuesday, June 16, 2026</p>
         </div>
         <div className="flex items-center gap-2">
           <button className="flex items-center gap-2 bg-white border px-4 py-2.5 rounded-xl text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm">
             <Download size={18} /> Export Report
           </button>
-          <button className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20">
-            <Calendar size={18} /> Today's Roll Call
-          </button>
+          {isClassTeacher ? (
+            <button className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2.5 rounded-xl text-sm font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20">
+              <Calendar size={18} /> Mark Attendance
+            </button>
+          ) : (
+            <div className="flex items-center gap-2 bg-gray-100 text-gray-400 px-6 py-2.5 rounded-xl text-sm font-bold cursor-not-allowed border">
+              <Lock size={18} /> Only Class Teachers
+            </div>
+          )}
         </div>
       </div>
 
