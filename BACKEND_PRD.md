@@ -25,7 +25,15 @@ The system uses a granular role-based access control (RBAC) system. A single use
 - **JWT Authentication:** Secure login for all users.
 - **Tenant Isolation:** Every database query must filter by `school_id`.
 
-### 3.2. Staff & Workforce Management
+### 3.2. Account Recovery & Security
+- **Forgot Password flow:**
+    - Request: User enters email.
+    - System: Validates email and generates a secure, time-limited token.
+    - System: Sends email via SMTP (SendGrid/Mailgun) with a recovery link.
+    - Reset: User clicks link and sets a new password.
+- **Admin Reset:** School Admins should be able to manually reset passwords for staff/students from the Staff/Student management modules.
+
+### 3.3. Staff & Workforce Management
 - **Profile Management:** Name, Email, Phone, Joined Date, and Roles.
 - **Multi-Role Assignment:** Support for users having multiple roles (e.g., "Teacher" + "Class Teacher").
 

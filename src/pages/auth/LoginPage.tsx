@@ -87,6 +87,12 @@ export default function LoginPage() {
             </button>
           </div>
           
+          <div className="pt-8 text-center">
+            <Link to="/forgot-password" className="text-[10px] font-black text-gray-400 hover:text-gray-900 uppercase tracking-widest transition-colors inline-flex items-center gap-2">
+              Forgot your login details? <ArrowRight size={12} />
+            </Link>
+          </div>
+          
           <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-relaxed">
             
           </p>

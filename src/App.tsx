@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/auth/LoginPage';
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 import DashboardLayout from './components/layout/DashboardLayout';
 import AdminDashboard from './pages/dashboards/AdminDashboard';
 import TeacherDashboard from './pages/dashboards/TeacherDashboard';
@@ -30,6 +31,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/dashboard" element={<PrivateRoute><DashboardLayout /></PrivateRoute>}>
           <Route path="platform" element={<PlatformAdminDashboard />} />
           <Route path="admin" element={<AdminDashboard />} />
