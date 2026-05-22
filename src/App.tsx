@@ -13,6 +13,7 @@ import ResultsModule from './pages/modules/ResultsModule';
 import StaffModule from './pages/modules/StaffModule';
 import FeeModule from './pages/modules/FeeModule';
 import SettingsModule from './pages/modules/SettingsModule';
+import StudentsModule from './pages/modules/StudentsModule';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 function PrivateRoute({ children, roles }: { children: React.ReactNode, roles?: string[] }) {
@@ -42,7 +43,7 @@ export default function App() {
           <Route path="results" element={<ResultsModule />} />
           <Route path="staff" element={<StaffModule />} />
           <Route path="fees" element={<FeeModule />} />
-          <Route path="students" element={<AttendanceModule />} /> {/* Multi-purpose student view */}
+          <Route path="students" element={<StudentsModule />} />
           <Route path="settings" element={<SettingsModule />} />
         </Route>
       </Routes>
